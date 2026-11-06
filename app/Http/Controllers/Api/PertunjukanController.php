@@ -10,15 +10,47 @@ use App\Http\Resources\PertunjukanResource;
 
 class PertunjukanController extends Controller
 {
-    public function index()
+    
+public function index(Request $request)
 {
-    $pertunjukans = Pertunjukan::all();
+    $query = Pertunjukan::query();
+
+    // Pencarian nama atau lokasi pertunjukan
+    if ($request->filled('keyword')) {
+        $keyword = $request->keyword;
+
+        $query->where(function ($q) use ($keyword) {
+            $q->where('name', 'like', "%{$keyword}%")
+              ->orWhere('location', 'like', "%{$keyword}%");
+        });
+    }
+
+    // Filter berdasarkan lokasi
+    if ($request->filled('location')) {
+        $query->where('location', $request->location);
+    }
+
+    // Jumlah data per halaman
+    $limit = min(max((int) $request->input('limit', 10), 1), 100);
+
+    // Pagination
+    $pertunjukans = $query->orderBy('id')
+                          ->paginate($limit);
 
     return response()->json([
         'message' => 'Daftar pertunjukan berhasil diambil',
-        'data' => PertunjukanResource::collection($pertunjukans)
+        'data' => PertunjukanResource::collection(
+            $pertunjukans->items()
+        ),
+        'pagination' => [
+            'current_page' => $pertunjukans->currentPage(),
+            'last_page' => $pertunjukans->lastPage(),
+            'per_page' => $pertunjukans->perPage(),
+            'total' => $pertunjukans->total(),
+        ]
     ], 200);
 }
+
 
     // Menambahkan pertunjukan baru
     public function store(Request $request)

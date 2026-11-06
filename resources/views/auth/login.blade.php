@@ -1,62 +1,151 @@
+
 <x-guest-layout>
-    <x-auth-card>
-        <x-slot name="logo">
-            <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-            </a>
-        </x-slot>
 
-        <!-- Session Status -->
-        <x-auth-session-status class="mb-4" :status="session('status')" />
+    <div class="min-h-screen bg-slate-50 flex items-center justify-center px-5 py-12">
 
-        <!-- Validation Errors -->
-        <x-auth-validation-errors class="mb-4" :errors="$errors" />
+        <div class="w-full max-w-md">
 
-        <form method="POST" action="{{ route('login') }}">
-            @csrf
-
-            <!-- Email Address -->
-            <div>
-                <x-label for="email" :value="__('Email')" />
-
-                <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autofocus />
+            {{-- KEMBALI KE BERANDA --}}
+            <div class="text-center mb-6">
+                <a href="{{ route('home') }}"
+                   class="text-sm text-slate-500 hover:text-blue-600 transition">
+                    ← Kembali ke Beranda
+                </a>
             </div>
 
-            <!-- Password -->
-            <div class="mt-4">
-                <x-label for="password" :value="__('Password')" />
+            {{-- KARTU LOGIN --}}
+            <div class="bg-white border border-slate-200 rounded-2xl shadow-lg p-7 md:p-9">
 
-                <x-input id="password" class="block mt-1 w-full"
-                                type="password"
-                                name="password"
-                                required autocomplete="current-password" />
-            </div>
-            <div class="mt-4 text-center">
-    Belum punya akun?
-    <a href="{{ route('register') }}"
-       class="underline text-sm text-gray-600 hover:text-gray-900">
-        Register
-    </a>
-</div>
-            <!-- Remember Me -->
-            <div class="block mt-4">
-                <label for="remember_me" class="inline-flex items-center">
-                    <input id="remember_me" type="checkbox" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember">
-                    <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
-                </label>
-            </div>
+                {{-- LOGO --}}
+                <div class="text-center mb-8">
 
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
+                    <a href="{{ route('home') }}"
+                       class="inline-flex items-center justify-center w-14 h-14 bg-blue-600 rounded-xl text-white font-bold text-xl shadow-sm">
+                        NM
                     </a>
-                @endif
 
-                <x-button class="ml-3">
-                    {{ __('Log in') }}
-                </x-button>
+                    <h1 class="text-2xl font-bold text-slate-800 mt-5">
+                        Selamat Datang!
+                    </h1>
+
+                    <p class="text-sm text-slate-500 mt-2">
+                        Login ke akun NusaMart Anda.
+                    </p>
+
+                </div>
+
+                {{-- STATUS SESSION --}}
+                <x-auth-session-status
+                    class="mb-4"
+                    :status="session('status')"
+                />
+
+                {{-- VALIDASI ERROR --}}
+                <x-auth-validation-errors
+                    class="mb-4"
+                    :errors="$errors"
+                />
+
+                {{-- FORM LOGIN --}}
+                <form method="POST" action="{{ route('login') }}" class="space-y-5">
+                    @csrf
+
+                    {{-- EMAIL --}}
+                    <div>
+                        <label for="email"
+                               class="block text-sm font-semibold text-slate-700 mb-2">
+                            Alamat Email
+                        </label>
+
+                        <input
+                            id="email"
+                            type="email"
+                            name="email"
+                            value="{{ old('email') }}"
+                            placeholder="Masukkan alamat email"
+                            required
+                            autofocus
+                            autocomplete="username"
+                            class="w-full border border-slate-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        >
+                    </div>
+
+                    {{-- PASSWORD --}}
+                    <div>
+                        <label for="password"
+                               class="block text-sm font-semibold text-slate-700 mb-2">
+                            Password
+                        </label>
+
+                        <input
+                            id="password"
+                            type="password"
+                            name="password"
+                            placeholder="Masukkan password"
+                            required
+                            autocomplete="current-password"
+                            class="w-full border border-slate-300 rounded-lg px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        >
+                    </div>
+
+                    {{-- REMEMBER ME --}}
+                    <div class="flex items-center justify-between gap-3">
+
+                        <label for="remember_me"
+                               class="flex items-center gap-2 text-sm text-slate-600">
+
+                            <input
+                                id="remember_me"
+                                type="checkbox"
+                                name="remember"
+                                class="rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                            >
+
+                            Ingat saya
+
+                        </label>
+
+                        @if (Route::has('password.request'))
+                            <a href="{{ route('password.request') }}"
+                               class="text-sm text-blue-600 hover:text-blue-700 font-medium">
+                                Lupa password?
+                            </a>
+                        @endif
+
+                    </div>
+
+                    {{-- TOMBOL LOGIN --}}
+                    <button
+                        type="submit"
+                        class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition shadow-sm">
+                        Login
+                    </button>
+
+                </form>
+
+                {{-- REGISTRASI --}}
+                <div class="border-t border-slate-200 mt-7 pt-6 text-center">
+
+                    <p class="text-sm text-slate-500">
+                        Belum punya akun?
+
+                        <a href="{{ route('register') }}"
+                           class="text-blue-600 hover:text-blue-700 font-semibold">
+                            Daftar Sekarang
+                        </a>
+                    </p>
+
+                </div>
+
             </div>
-        </form>
-    </x-auth-card>
+
+            {{-- FOOTER --}}
+            <p class="text-center text-xs text-slate-400 mt-7">
+                © {{ date('Y') }} NusaMart - Wisata Budaya Bali
+            </p>
+
+        </div>
+
+    </div>
+
 </x-guest-layout>

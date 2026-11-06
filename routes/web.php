@@ -21,18 +21,10 @@ Route::get('/products', [HomeController::class, 'products']);
 
 Route::get('/contact', [HomeController::class, 'contact'])->name('contact');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
 
 
-Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
-
-    Route::resource('pertunjukan', PertunjukanController::class);
-});
-
+Route::get('/admin/{any?}', function () {
+    return view('react');
+})->where('any', '.*');
 
 require __DIR__.'/auth.php';

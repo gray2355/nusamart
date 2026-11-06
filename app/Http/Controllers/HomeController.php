@@ -8,12 +8,21 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function index()
-    {
-        $shows = Pertunjukan::all();
+    public function index(Request $request)
+{
+    $keyword = $request->input('keyword');
 
-        return view('frontpage.landingpage', compact('shows'));
-    }
+    $shows = Pertunjukan::query()
+        ->when($keyword, function ($query, $keyword) {
+            $query->where(function ($q) use ($keyword) {
+                $q->where('name', 'LIKE', "%{$keyword}%")
+                  ->orWhere('location', 'LIKE', "%{$keyword}%");
+            });
+        })
+        ->get();
+
+    return view('frontpage.landingpage', compact('shows', 'keyword'));
+}
 
     public function schedule()
     {
